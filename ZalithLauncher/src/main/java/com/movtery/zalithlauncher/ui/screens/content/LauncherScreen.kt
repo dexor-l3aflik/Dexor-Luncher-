@@ -1,3 +1,4 @@
+
 /*
  * Zalith Launcher 2
  * Copyright (C) 2025-2026 MovTery <movtery228@qq.com> and contributors
@@ -131,11 +132,6 @@ fun LauncherScreen(
     onOpenLink: (String) -> Unit,
     startGuideOnce: (GuideKeys.Keys) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        //发起新手引导
-        startGuideOnce(GuideKeys.Main)
-    }
-
     BaseScreen(
         screenKey = NormalNavKey.LauncherMain,
         currentKey = backStackViewModel.mainScreen.currentKey
@@ -203,21 +199,21 @@ fun LauncherScreen(
                         }
                     }
                 ) {
-                ContentMenu(
-                    modifier = Modifier
-                        .guideNode(
-                            key = GuideKeys.Main.Step.CardTip,
-                            holeRadius = 0.dp
-                        )
-                        .weight(ContentWeight)
-                        .offset { IntOffset(x = dragState.previewShift.value.roundToInt(), y = 0) },
-                    isVisible = isVisible,
-                    onLaunchGame = { version ->
-                        onLaunchGame(version)
-                    },
-                    onQuickPlayServer = onQuickPlayServer,
-                    onOpenVersionSettings = navigateToVersions
-                )
+                    ContentMenu(
+                        modifier = Modifier
+                            .guideNode(
+                                key = GuideKeys.Main.Step.CardTip,
+                                holeRadius = 0.dp
+                            )
+                            .weight(ContentWeight)
+                            .offset { IntOffset(x = dragState.previewShift.value.roundToInt(), y = 0) },
+                        isVisible = isVisible,
+                        onLaunchGame = { version ->
+                            onLaunchGame(version)
+                        },
+                        onQuickPlayServer = onQuickPlayServer,
+                        onOpenVersionSettings = navigateToVersions
+                    )
                 }
 
                 // ActionMenu 对接到了 End，留出空位
