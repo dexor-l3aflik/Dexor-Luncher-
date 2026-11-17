@@ -256,7 +256,7 @@ androidComponents {
         variant.outputs.forEach { output ->
             if (output is VariantOutputImpl) {
                 val variantName =
-                    variant.name.replaceFirstChar { it.uppercaseChar }
+                    variant.name.replaceFirstChar { it.uppercaseChar() }
 
                 afterEvaluate {
                     val task = tasks.named(
