@@ -256,7 +256,7 @@ androidComponents {
         variant.outputs.forEach { output ->
             if (output is VariantOutputImpl) {
                 val variantName =
-                    variant.name.replaceFirstChar { it.uppercaseChar() }
+                    variant.name.replaceFirstChar { it.uppercaseChar }
 
                 afterEvaluate {
                     val task = tasks.named(
@@ -500,6 +500,7 @@ dependencies {
     implementation(libs.maven.artifact)
     implementation(libs.mmkv)
     implementation(libs.process.phoenix)
+    implementation(libs.fishnet)
     implementation(libs.lunarcalendar)
     implementation(
         fileTree(
