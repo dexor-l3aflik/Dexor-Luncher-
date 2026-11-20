@@ -11,12 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 private val LmcPink = Color(0xFFE8A0C5)
 private val LmcWhite = Color(0xFFFDFBFF)
 private val LmcBlue = Color(0xFF52799F)
+private val LmcSelected = Color(0xFFFFE1EF)
 
 @Composable
 fun LmcHomeLayout(
@@ -33,6 +35,8 @@ fun LmcHomeLayout(
             .padding(10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+
+        // Left navigation sidebar
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
@@ -45,30 +49,54 @@ fun LmcHomeLayout(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                LmcNavItem("⌂", "Home", selectedItem) {
+
+                LmcNavItem(
+                    icon = "⌂",
+                    label = "Home",
+                    selectedItem = selectedItem
+                ) {
                     selectedItem = "Home"
                 }
 
-                LmcNavItem("♙", "Accounts", selectedItem) {
+                LmcNavItem(
+                    icon = "♙",
+                    label = "Accounts",
+                    selectedItem = selectedItem
+                ) {
                     selectedItem = "Accounts"
                 }
 
-                LmcNavItem("◇", "Wardrobe", selectedItem) {
+                LmcNavItem(
+                    icon = "◇",
+                    label = "Wardrobe",
+                    selectedItem = selectedItem
+                ) {
                     selectedItem = "Wardrobe"
                 }
 
-                LmcNavItem("▣", "Mods", selectedItem) {
+                LmcNavItem(
+                    icon = "▣",
+                    label = "Mods",
+                    selectedItem = selectedItem
+                ) {
                     selectedItem = "Mods"
                 }
 
-                Spacer(Modifier.weight(1f))
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
 
-                LmcNavItem("⚙", "Settings", selectedItem) {
+                LmcNavItem(
+                    icon = "⚙",
+                    label = "Settings",
+                    selectedItem = selectedItem
+                ) {
                     selectedItem = "Settings"
                 }
             }
         }
 
+        // Main content area
         Surface(
             modifier = Modifier
                 .weight(1f)
@@ -85,6 +113,7 @@ fun LmcHomeLayout(
             }
         }
 
+        // Right-side panel
         Surface(
             modifier = Modifier
                 .width(260.dp)
@@ -117,7 +146,7 @@ private fun LmcNavItem(
             .width(60.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(
-                if (selected) Color(0xFFFFE1EF)
+                if (selected) LmcSelected
                 else Color.Transparent
             )
             .clickable(onClick = onClick)
