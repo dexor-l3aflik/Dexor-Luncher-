@@ -3,17 +3,17 @@
  * Copyright (C) 2025-2026 MovTery <movtery228@qq.com> and contributors
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
  */
 
 package com.movtery.zalithlauncher.ui.screens.splash
@@ -123,7 +123,6 @@ fun WelcomeScreen(
         ) { screenType ->
             when (screenType) {
                 ScreenType.Watch -> {
-                    // 手表等方形或略宽的极小屏布局
                     WatchWelcomeScreen(
                         isVisible = isVisible,
                         started = started,
@@ -136,8 +135,8 @@ fun WelcomeScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+
                 ScreenType.Tablet -> {
-                    // 平板布局
                     TabletWelcomeScreen(
                         isVisible = isVisible,
                         started = started,
@@ -150,8 +149,8 @@ fun WelcomeScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+
                 ScreenType.Phone -> {
-                    // 手机横板布局
                     val availableWidth = minOf(maxWidth, 1280.dp) - 60.dp
                     val terminalWidth = availableWidth * (1.35f / 2.35f) - 20.dp
 
@@ -162,7 +161,6 @@ fun WelcomeScreen(
                             .padding(all = 20.dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
-                        // 终端卡片布局
                         WelcomeTerminal(
                             isVisible = isVisible,
                             modifier = Modifier
@@ -216,6 +214,7 @@ private fun Modifier.welcomeEntrance(
             )
         }
     )
+
     val opacity = swapAnimateAlphaProgressAsState(
         isVisible = isVisible && enter,
         animationSpec = if (isVisible) {
@@ -247,8 +246,9 @@ private fun WelcomeTerminal(
 ) {
     var welcomeText by remember { mutableStateOf("") }
     var welcomeFinished by remember { mutableStateOf(false) }
+
     val cursorTransition = rememberInfiniteTransition(label = "WelcomeCursor")
-    // 终端指针循环动画
+
     val cursorAlpha by cursorTransition.animateFloat(
         initialValue = 1f,
         targetValue = 1f,
@@ -265,23 +265,23 @@ private fun WelcomeTerminal(
         label = "WelcomeCursorAlpha"
     )
 
-    // 控制WELCOME标题的打字动画
     LaunchedEffect(Unit) {
         welcomeText = ""
         welcomeFinished = false
         delay(700.milliseconds)
+
         "WEL".forEach { character ->
             welcomeText += character
             delay(85.milliseconds)
         }
 
-        // 中途小小休息
         delay(420.milliseconds)
 
         "COME!".forEach { character ->
             welcomeText += character
             delay(85.milliseconds)
         }
+
         welcomeFinished = true
     }
 
@@ -295,6 +295,7 @@ private fun WelcomeTerminal(
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val titleWidth = (maxWidth - contentPadding * 2).coerceAtLeast(0.dp)
+
             val titleFontSize = with(LocalDensity.current) {
                 (titleWidth.toPx() / 6f).toSp().value
             }.coerceIn(12f, if (compact) 30f else 56f).sp
@@ -313,6 +314,7 @@ private fun WelcomeTerminal(
                         shape = RoundedCornerShape(if (compact) 24.dp else 44.dp)
                     )
             )
+
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -332,7 +334,6 @@ private fun WelcomeTerminal(
                     .fillMaxSize()
                     .padding(all = contentPadding)
             ) {
-                // 左上角标签
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
@@ -363,7 +364,7 @@ private fun WelcomeTerminal(
                         letterSpacing = if (compact) (-1).sp else (-2).sp,
                         maxLines = 1
                     )
-                    // 模拟终端指针
+
                     Text(
                         modifier = Modifier.alpha(cursorAlpha),
                         text = "_",
@@ -419,6 +420,7 @@ private fun WatchWelcomeScreen(
 
         Box(modifier = Modifier.fillMaxSize()) {
             val listState = rememberScrollState()
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -505,6 +507,7 @@ private fun TabletWelcomeScreen(
                 .fillMaxSize()
         ) {
             val listState = rememberScrollState()
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -517,7 +520,6 @@ private fun TabletWelcomeScreen(
                     modifier = Modifier.welcomeEntrance(isVisible = isVisible, delayMillis = 300)
                 )
 
-                // 终端卡片布局
                 WelcomeTerminal(
                     isVisible = isVisible,
                     modifier = Modifier
@@ -564,6 +566,7 @@ private fun WelcomeInformation(
 ) {
     Box(modifier = modifier) {
         val listState = rememberScrollState()
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -610,7 +613,7 @@ private fun ProductBanner(
     ) {
         Image(
             modifier = Modifier.size(if (compact) 36.dp else 52.dp),
-            painter = painterResource(R.drawable.img_launcher),
+            painter = painterResource(R.drawable.lmc_craft_logo),
             contentDescription = null
         )
 
@@ -650,11 +653,13 @@ private fun WelcomeIntroduction(
 
     LaunchedEffect(agreement) {
         val region = if (Locale.getDefault().country.equals("CN", ignoreCase = true)) "zh" else "global"
+
         val selectedAgreement = agreement?.files?.firstOrNull {
             it.effectiveRegion.equals(region, ignoreCase = true)
         } ?: agreement?.files?.firstOrNull {
             it.effectiveRegion.equals("global", ignoreCase = true)
         }
+
         currentAgreement = selectedAgreement
 
         val availableDocuments = withContext(Dispatchers.IO) {
@@ -664,9 +669,13 @@ private fun WelcomeIntroduction(
                 }.isSuccess
             }
         }
+
         documents = availableDocuments
         onAgreementRequiredChange(availableDocuments.isNotEmpty())
-        if (availableDocuments.isEmpty()) onAgreementCheckedChange(false)
+
+        if (availableDocuments.isEmpty()) {
+            onAgreementCheckedChange(false)
+        }
     }
 
     CompositionLocalProvider(
@@ -687,6 +696,7 @@ private fun WelcomeIntroduction(
                     text = stringResource(R.string.welcome_screen_intro_primary, BuildKeys.LAUNCHER_NAME),
                     lineHeight = if (compact) 20.sp else 26.sp
                 )
+
                 Text(
                     text = stringResource(R.string.welcome_screen_intro_core),
                     lineHeight = if (compact) 20.sp else 26.sp
