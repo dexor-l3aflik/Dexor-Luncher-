@@ -1,3 +1,4 @@
+
 package com.movtery.zalithlauncher.ui.screens.content.home
 
 import androidx.compose.foundation.background
@@ -276,10 +277,19 @@ fun LmcLaunchPanel(
 
                             Text(
                                 text = when {
-                                    isRefreshing -> "Refreshing versions..."
-                                    version == null -> "Open version manager to install"
-                                    version.isValid() -> version.getVersionSummary()
-                                    else -> "Version requires attention"
+                                    isRefreshing ->
+                                        "Refreshing versions..."
+
+                                    version == null ->
+                                        "Open version manager to install"
+
+                                    else -> version?.let { selectedVersion ->
+                                        if (selectedVersion.isValid()) {
+                                            selectedVersion.getVersionSummary()
+                                        } else {
+                                            "Version requires attention"
+                                        }
+                                    } ?: "No installed versions"
                                 },
                                 color = LmcColors.TextMuted,
                                 fontSize = 12.sp,
