@@ -1,4 +1,3 @@
-
 package com.movtery.zalithlauncher.ui.screens.content.home
 
 import androidx.compose.foundation.background
@@ -25,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -34,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,92 +75,93 @@ fun LmcLaunchPanel(
             .fillMaxSize()
             .padding(
                 horizontal = 17.dp,
-                vertical = 15.dp
+                vertical = 10.dp
             ),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        // PLAYER PROFILE
+        // ACCOUNT PROFILE
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(22.dp))
+                .height(58.dp)
+                .clip(RoundedCornerShape(20.dp))
                 .clickable(onClick = onAccountClick)
-                .padding(5.dp),
+                .padding(horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(13.dp)
         ) {
             if (account != null) {
                 PlayerFace(
                     account = account,
-                    avatarSize = 58.dp
+                    avatarSize = 56.dp
                 )
             } else {
                 Box(
                     modifier = Modifier
-                        .size(58.dp)
-                        .clip(RoundedCornerShape(15.dp))
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(14.dp))
                         .background(LmcColors.SkyLight),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_add),
-                        contentDescription = null,
+                        contentDescription = "Add account",
                         tint = LmcColors.Blue,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(29.dp)
                     )
                 }
             }
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = if (account == null) "Welcome"
-                    else "Welcome Back,",
+                    text = if (account == null) "Welcome" else "Welcome Back,",
                     color = LmcColors.Text,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    maxLines = 1
                 )
 
-                Text(
-                    text = account?.username ?: "Add Account",
-                    color = LmcColors.Text,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = account?.username ?: "Add Account",
+                        color = LmcColors.Text,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
 
-                if (account != null) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_check),
-                            contentDescription = null,
-                            tint = Color.White,
+                    if (account != null) {
+                        Box(
                             modifier = Modifier
-                                .size(15.dp)
+                                .size(19.dp)
                                 .clip(CircleShape)
-                                .background(LmcColors.Blue)
-                                .padding(2.dp)
-                        )
-
-                        Text(
-                            text = "Active profile",
-                            color = LmcColors.TextMuted,
-                            fontSize = 12.sp
-                        )
+                                .background(LmcColors.Blue),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_check),
+                                contentDescription = "Active account",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .padding(1.dp)
+                            )
+                        }
                     }
                 }
             }
 
             Box(
                 modifier = Modifier
-                    .size(43.dp)
+                    .size(45.dp)
                     .clip(CircleShape)
-                    .background(Color.White)
+                    .background(Color.White.copy(alpha = 0.92f))
                     .clickable(onClick = onAccountClick),
                 contentAlignment = Alignment.Center
             ) {
@@ -169,247 +169,230 @@ fun LmcLaunchPanel(
                     painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
                     contentDescription = "Account options",
                     tint = LmcColors.Text,
-                    modifier = Modifier.size(27.dp)
+                    modifier = Modifier.size(28.dp)
                 )
             }
         }
 
-        HorizontalDivider(color = LmcColors.Divider)
+        HorizontalDivider(color = LmcColors.Divider, thickness = 1.dp)
 
-        // EDITION
-        Column(
-            verticalArrangement = Arrangement.spacedBy(9.dp)
+        Text(
+            text = "Minecraft Version",
+            color = LmcColors.Text,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
+
+        // EDITION SELECTOR - JAVA IS THE ACTIVE SUPPORTED EDITION.
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(43.dp),
+            shape = RoundedCornerShape(24.dp),
+            color = LmcColors.SkyLight
         ) {
-            Text(
-                text = "Minecraft Edition",
-                color = LmcColors.Text,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Row(
+                modifier = Modifier.padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(22.dp))
+                        .background(LmcColors.Blue),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_coffee_filled),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Java Edition",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
+                }
 
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "⚛",
+                        color = LmcColors.TextMuted,
+                        fontSize = 19.sp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Rust Edition",
+                        color = LmcColors.TextMuted,
+                        fontSize = 16.sp,
+                        maxLines = 1
+                    )
+                }
+            }
+        }
+
+        // VERSION PICKER
+        Box {
             Surface(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(58.dp),
                 shape = RoundedCornerShape(22.dp),
                 color = LmcColors.SkyLight
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(22.dp))
+                        .clickable { showVersionMenu = true }
+                        .padding(horizontal = 12.dp, vertical = 7.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(19.dp))
-                            .background(LmcColors.Blue)
-                            .padding(
-                                horizontal = 13.dp,
-                                vertical = 10.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    VersionIconImage(
+                        version = version,
+                        modifier = Modifier.size(42.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(11.dp))
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_coffee_filled),
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(21.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
                         Text(
-                            text = "Java Edition",
-                            color = Color.White,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            text = version?.getVersionName() ?: "No installed versions",
+                            color = LmcColors.Text,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = when {
+                                isRefreshing -> "Refreshing versions..."
+                                version == null -> "Open version manager to install"
+                                else -> version?.let { selectedVersion ->
+                                    if (selectedVersion.isValid()) {
+                                        selectedVersion.getVersionSummary()
+                                    } else {
+                                        "Version requires attention"
+                                    }
+                                } ?: "No installed versions"
+                            },
+                            color = LmcColors.TextMuted,
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
+
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
+                        contentDescription = "Choose version",
+                        tint = LmcColors.Text,
+                        modifier = Modifier.size(27.dp)
+                    )
                 }
             }
-        }
 
-        // VERSION SELECTOR
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp),
-                color = LmcColors.SkyLight
+            DropdownMenu(
+                expanded = showVersionMenu,
+                onDismissRequest = { showVersionMenu = false },
+                modifier = Modifier.width(275.dp)
             ) {
-                Box {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(22.dp))
-                            .clickable {
-                                showVersionMenu = true
-                            }
-                            .padding(
-                                horizontal = 14.dp,
-                                vertical = 13.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        VersionIconImage(
-                            version = version,
-                            modifier = Modifier.size(43.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(3.dp)
-                        ) {
-                            Text(
-                                text = version?.getVersionName()
-                                    ?: "No installed versions",
-                                color = LmcColors.Text,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-
-                            Text(
-                                text = when {
-                                    isRefreshing ->
-                                        "Refreshing versions..."
-
-                                    version == null ->
-                                        "Open version manager to install"
-
-                                    else -> version?.let { selectedVersion ->
-                                        if (selectedVersion.isValid()) {
-                                            selectedVersion.getVersionSummary()
-                                        } else {
-                                            "Version requires attention"
-                                        }
-                                    } ?: "No installed versions"
-                                },
-                                color = LmcColors.TextMuted,
-                                fontSize = 12.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
-                            contentDescription = "Choose version",
-                            tint = LmcColors.Text,
-                            modifier = Modifier.size(27.dp)
-                        )
-                    }
-
-                    DropdownMenu(
-                        expanded = showVersionMenu,
-                        onDismissRequest = {
+                if (versions.isEmpty()) {
+                    DropdownMenuItem(
+                        text = { Text("No installed versions") },
+                        onClick = {
                             showVersionMenu = false
-                        },
-                        modifier = Modifier.width(270.dp)
-                    ) {
-                        if (versions.isEmpty()) {
-                            DropdownMenuItem(
-                                text = {
-                                    Text("No installed versions")
-                                },
-                                onClick = {
-                                    showVersionMenu = false
-                                    onOpenVersions()
-                                }
-                            )
-                        } else {
-                            versions.forEach { item ->
-                                DropdownMenuItem(
-                                    text = {
-                                        Column {
-                                            Text(
-                                                text = item.getVersionName(),
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                            Text(
-                                                text = item.getVersionSummary(),
-                                                fontSize = 12.sp
-                                            )
-                                        }
-                                    },
-                                    onClick = {
-                                        VersionsManager.saveVersion(item)
-                                        showVersionMenu = false
-                                    }
-                                )
-                            }
+                            onOpenVersions()
                         }
-
-                        HorizontalDivider()
-
+                    )
+                } else {
+                    versions.forEach { item ->
                         DropdownMenuItem(
                             text = {
-                                Text("Manage versions")
-                            },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(
-                                        R.drawable.ic_download_2_filled
-                                    ),
-                                    contentDescription = null
-                                )
+                                Column {
+                                    Text(
+                                        text = item.getVersionName(),
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Text(
+                                        text = item.getVersionSummary(),
+                                        fontSize = 12.sp
+                                    )
+                                }
                             },
                             onClick = {
+                                VersionsManager.saveVersion(item)
                                 showVersionMenu = false
-                                onOpenVersions()
                             }
                         )
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(7.dp))
+                HorizontalDivider()
 
-            // VERSION SETTINGS
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(15.dp))
-                    .clickable(onClick = onVersionSettings)
-                    .padding(
-                        horizontal = 10.dp,
-                        vertical = 7.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_settings_filled),
-                    contentDescription = null,
-                    tint = LmcColors.TextMuted,
-                    modifier = Modifier.size(17.dp)
+                DropdownMenuItem(
+                    text = { Text("Manage versions") },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_download_2_filled),
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        showVersionMenu = false
+                        onOpenVersions()
+                    }
                 )
 
-                Spacer(modifier = Modifier.width(7.dp))
-
-                Text(
-                    text = "Version settings",
-                    color = LmcColors.TextMuted,
-                    fontSize = 12.sp
+                DropdownMenuItem(
+                    text = { Text("Version settings") },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_settings_filled),
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        showVersionMenu = false
+                        onVersionSettings()
+                    }
                 )
             }
         }
 
-        // LAUNCH BUTTON
+        Spacer(modifier = Modifier.weight(1f))
+
+        // FULL-WIDTH LAUNCH BUTTON
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(57.dp)
+                .height(40.dp)
                 .clip(RoundedCornerShape(24.dp))
-                .background(LmcColors.Blue)
-                .clickable {
-                    onLaunchGame(version)
-                },
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF4CB9FF),
+                            LmcColors.Blue,
+                            LmcColors.BlueDark
+                        )
+                    )
+                )
+                .clickable { onLaunchGame(version) },
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -422,22 +405,18 @@ fun LmcLaunchPanel(
                     tint = Color.White,
                     modifier = Modifier.size(25.dp)
                 )
-
-                Spacer(modifier = Modifier.width(11.dp))
-
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "Launch",
                     color = Color.White,
                     fontSize = 21.sp,
                     fontWeight = FontWeight.Bold
                 )
-
-                Spacer(modifier = Modifier.width(9.dp))
-
+                Spacer(modifier = Modifier.width(10.dp))
                 Icon(
                     painter = painterResource(R.drawable.ic_dashboard_filled),
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.8f),
+                    tint = Color.White.copy(alpha = 0.82f),
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -488,30 +467,20 @@ fun LmcCharacterPreview(
 
     var showFullscreen by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        // CHARACTER HEADER
+    Column(modifier = modifier.fillMaxSize()) {
+        // CHARACTER PANEL HEADER
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    start = 10.dp,
-                    end = 4.dp,
-                    top = 5.dp,
-                    bottom = 5.dp
-                ),
+                .padding(start = 10.dp, end = 4.dp, top = 5.dp, bottom = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(18.dp),
-                color = Color(0xFFD3E9FF)
+                shape = RoundedCornerShape(22.dp),
+                color = Color(0xFFDCEEFF)
             ) {
                 Row(
-                    modifier = Modifier.padding(
-                        horizontal = 13.dp,
-                        vertical = 8.dp
-                    ),
+                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -520,13 +489,11 @@ fun LmcCharacterPreview(
                         tint = LmcColors.Text,
                         modifier = Modifier.size(19.dp)
                     )
-
                     Spacer(modifier = Modifier.width(7.dp))
-
                     Text(
                         text = "Character",
                         color = LmcColors.Text,
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -534,34 +501,26 @@ fun LmcCharacterPreview(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            IconButton(
-                onClick = {
-                    showFullscreen = true
-                }
-            ) {
+            IconButton(onClick = { showFullscreen = true }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_fullscreen_exit),
                     contentDescription = "Expand character",
                     tint = LmcColors.Text,
-                    modifier = Modifier.size(23.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
 
-        // 3D PLAYER PREVIEW
+        // LIVE 3D PLAYER MODEL
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(
-                    horizontal = 5.dp,
-                    vertical = 4.dp
-                ),
+                .padding(horizontal = 5.dp, vertical = 3.dp),
             contentAlignment = Alignment.Center
         ) {
             PetModelView(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 skin = skinBytes,
                 cape = capeBytes,
                 arm = armModel,
@@ -572,27 +531,20 @@ fun LmcCharacterPreview(
             )
         }
 
-        // CHARACTER ACTIONS
+        // CHARACTER ACTION BUTTONS
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = 5.dp,
-                    bottom = 6.dp
-                ),
+                .padding(top = 5.dp, bottom = 6.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             LmcCharacterAction(
                 icon = R.drawable.ic_refresh,
                 description = "Refresh skin",
-                onClick = {
-                    AccountsManager.refreshWardrobe()
-                }
+                onClick = { AccountsManager.refreshWardrobe() }
             )
-
             Spacer(modifier = Modifier.width(15.dp))
-
             LmcCharacterAction(
                 icon = R.drawable.ic_checkroom,
                 description = "Open wardrobe",
@@ -602,11 +554,7 @@ fun LmcCharacterPreview(
     }
 
     if (showFullscreen) {
-        Dialog(
-            onDismissRequest = {
-                showFullscreen = false
-            }
-        ) {
+        Dialog(onDismissRequest = { showFullscreen = false }) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -629,14 +577,8 @@ fun LmcCharacterPreview(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
-
                         Spacer(modifier = Modifier.weight(1f))
-
-                        IconButton(
-                            onClick = {
-                                showFullscreen = false
-                            }
-                        ) {
+                        IconButton(onClick = { showFullscreen = false }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_close),
                                 contentDescription = "Close",
@@ -676,9 +618,9 @@ private fun LmcCharacterAction(
 ) {
     Box(
         modifier = Modifier
-            .size(49.dp)
+            .size(50.dp)
             .clip(CircleShape)
-            .background(LmcColors.Glass)
+            .background(Color.White.copy(alpha = 0.93f))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -686,7 +628,7 @@ private fun LmcCharacterAction(
             painter = painterResource(icon),
             contentDescription = description,
             tint = LmcColors.Text,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(25.dp)
         )
     }
 }
