@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -13,12 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-private val LmcPink = Color(0xFFE8A0C5)
-private val LmcWhite = Color(0xFFFDFBFF)
-private val LmcBlue = Color(0xFF52799F)
-private val LmcSelected = Color(0xFFFFE1EF)
+private val LmcSky = Color(0xFFB8D9FF)
+private val LmcBlue = Color(0xFF0868F5)
+private val LmcText = Color(0xFF405C79)
+private val LmcGlass = Color(0xEFFFFFFF)
+private val LmcSelected = Color(0xFF0868F5)
 
 @Composable
 fun LmcHomeLayout(
@@ -26,114 +27,163 @@ fun LmcHomeLayout(
     content: @Composable () -> Unit,
     sideContent: @Composable () -> Unit
 ) {
-    var selectedItem by remember { mutableStateOf("Home") }
+    var selectedItem by remember { mutableStateOf("Play") }
 
     Row(
         modifier = modifier
             .fillMaxSize()
-            .background(LmcPink)
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .background(LmcSky)
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-
-        // Left navigation sidebar
+        // Left toolbar
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(72.dp),
-            shape = RoundedCornerShape(24.dp),
-            color = LmcWhite
+                .width(62.dp),
+            shape = RoundedCornerShape(28.dp),
+            color = LmcGlass
         ) {
             Column(
-                modifier = Modifier.padding(vertical = 12.dp),
+                modifier = Modifier.padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
-                LmcNavItem(
-                    icon = "⌂",
-                    label = "Home",
-                    selectedItem = selectedItem
-                ) {
-                    selectedItem = "Home"
+                LmcRailItem("⌂", "Home", selectedItem) {
+                    selectedItem = "Play"
                 }
-
-                LmcNavItem(
-                    icon = "♙",
-                    label = "Accounts",
-                    selectedItem = selectedItem
-                ) {
+                LmcRailItem("▣", "Game", selectedItem) {
+                    selectedItem = "Play"
+                }
+                LmcRailItem("↓", "Downloads", selectedItem) {
+                    selectedItem = "Downloads"
+                }
+                LmcRailItem("♙", "Accounts", selectedItem) {
                     selectedItem = "Accounts"
                 }
-
-                LmcNavItem(
-                    icon = "◇",
-                    label = "Wardrobe",
-                    selectedItem = selectedItem
-                ) {
-                    selectedItem = "Wardrobe"
-                }
-
-                LmcNavItem(
-                    icon = "▣",
-                    label = "Mods",
-                    selectedItem = selectedItem
-                ) {
-                    selectedItem = "Mods"
-                }
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
-
-                LmcNavItem(
-                    icon = "⚙",
-                    label = "Settings",
-                    selectedItem = selectedItem
-                ) {
-                    selectedItem = "Settings"
+                LmcRailItem("▰", "Files", selectedItem) {
+                    selectedItem = "Files"
                 }
             }
         }
 
-        // Main content area
-        Surface(
+        // Main dashboard
+        Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight(),
-            shape = RoundedCornerShape(26.dp),
-            color = LmcWhite
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                content()
-            }
-        }
+                Surface(
+                    modifier = Modifier
+                        .weight(1.65f)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(28.dp),
+                    color = LmcGlass
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(10.dp)
+                    ) {
+                        content()
+                    }
+                }
 
-        // Right-side panel
-        Surface(
-            modifier = Modifier
-                .width(260.dp)
-                .fillMaxHeight(),
-            shape = RoundedCornerShape(26.dp),
-            color = Color(0xFFCCE8FF)
-        ) {
-            Box(
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(28.dp),
+                    color = Color(0xFFD6EDFF)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(10.dp)
+                    ) {
+                        sideContent()
+                    }
+                }
+            }
+
+            // Bottom navigation
+            Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .height(72.dp),
+                shape = RoundedCornerShape(28.dp),
+                color = LmcGlass
             ) {
-                sideContent()
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 6.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    LmcBottomItem("▶", "Play", selectedItem) {
+                        selectedItem = "Play"
+                    }
+                    LmcBottomItem("♙", "Accounts", selectedItem) {
+                        selectedItem = "Accounts"
+                    }
+                    LmcBottomItem("♧", "Wardrobe", selectedItem) {
+                        selectedItem = "Wardrobe"
+                    }
+                    LmcBottomItem("◇", "Mods", selectedItem) {
+                        selectedItem = "Mods"
+                    }
+                    LmcBottomItem("⚙", "Settings", selectedItem) {
+                        selectedItem = "Settings"
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun LmcNavItem(
+private fun LmcRailItem(
+    icon: String,
+    label: String,
+    selectedItem: String,
+    onClick: () -> Unit
+) {
+    val selected = selectedItem == label ||
+        (label == "Home" && selectedItem == "Play") ||
+        (label == "Game" && selectedItem == "Play")
+
+    Column(
+        modifier = Modifier
+            .width(52.dp)
+            .clip(RoundedCornerShape(22.dp))
+            .background(if (selected) Color(0xFFDCEBFF) else Color.Transparent)
+            .clickable(onClick = onClick)
+            .padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Text(
+            text = icon,
+            color = if (selected) LmcBlue else LmcText,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = label,
+            color = LmcText,
+            maxLines = 1
+        )
+    }
+}
+
+@Composable
+private fun LmcBottomItem(
     icon: String,
     label: String,
     selectedItem: String,
@@ -141,29 +191,30 @@ private fun LmcNavItem(
 ) {
     val selected = selectedItem == label
 
-    Column(
+    Row(
         modifier = Modifier
-            .width(60.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(
-                if (selected) LmcSelected
-                else Color.Transparent
-            )
-            .clickable(onClick = onClick)
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+            .weight(1f)
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(24.dp))
+            .background(if (selected) LmcSelected else Color.Transparent)
+            .clickable(onClick = onClick),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = icon,
-            style = MaterialTheme.typography.titleLarge,
-            color = if (selected) LmcPink else LmcBlue
-        )
-
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = LmcBlue
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = icon,
+                color = if (selected) Color.White else LmcText,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = label,
+                color = if (selected) Color.White else LmcText,
+                maxLines = 1
+            )
+        }
     }
 }
