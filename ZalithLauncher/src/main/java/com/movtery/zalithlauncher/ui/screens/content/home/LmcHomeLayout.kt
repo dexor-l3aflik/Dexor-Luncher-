@@ -36,7 +36,6 @@ fun LmcHomeLayout(
             .padding(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // Left toolbar
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
@@ -67,7 +66,6 @@ fun LmcHomeLayout(
             }
         }
 
-        // Main dashboard
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -113,7 +111,6 @@ fun LmcHomeLayout(
                 }
             }
 
-            // Bottom navigation
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -183,7 +180,7 @@ private fun LmcRailItem(
 }
 
 @Composable
-private fun LmcBottomItem(
+private fun RowScope.LmcBottomItem(
     icon: String,
     label: String,
     selectedItem: String,
