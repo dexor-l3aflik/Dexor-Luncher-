@@ -1,5 +1,6 @@
 package com.movtery.zalithlauncher.ui.screens.content.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,8 +43,8 @@ object LmcColors {
     val BlueDark = Color(0xFF0757D5)
     val Text = Color(0xFF405C79)
     val TextMuted = Color(0xFF7189A2)
-    val Glass = Color(0xF7FFFFFF)
-    val Panel = Color(0xFFE4F1FF)
+    val Glass = Color(0xEFFFFFFF)
+    val Panel = Color(0xE8F5FAFF)
     val Divider = Color(0xFFD3E3F4)
     val TopBar = Color(0xFFAED2FA)
 }
@@ -64,187 +66,238 @@ fun LmcHomeLayout(
 ) {
     var selectedItem by remember { mutableStateOf("Play") }
 
-    Row(
-        modifier = modifier
-            .fillMaxSize()
-            .background(LmcColors.Sky)
-            .padding(
-                start = 9.dp,
-                end = 9.dp,
-                top = 9.dp,
-                bottom = 7.dp
-            ),
-        horizontalArrangement = Arrangement.spacedBy(9.dp)
-    ) {
-        // LEFT NAVIGATION RAIL
-        Surface(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(62.dp),
-            shape = RoundedCornerShape(28.dp),
-            color = LmcColors.Glass
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 7.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                LmcRailIcon(
-                    icon = R.drawable.ic_home_filled,
-                    selected = true,
-                    onClick = onHomeClick
-                )
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.lmc_light_background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
 
-                LmcRailIcon(
-                    icon = R.drawable.ic_sports_esports_filled,
-                    selected = false,
-                    onClick = onGameClick
-                )
-
-                LmcRailIcon(
-                    icon = R.drawable.ic_download_2_filled,
-                    selected = false,
-                    onClick = onDownloadsClick
-                )
-
-                LmcRailIcon(
-                    icon = R.drawable.ic_group_filled,
-                    selected = false,
-                    onClick = onAccountsClick
-                )
-
-                LmcRailIcon(
-                    icon = R.drawable.ic_folder_filled,
-                    selected = false,
-                    onClick = onFilesClick
-                )
-            }
-        }
-
-        // MAIN CONTENT
         Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .fillMaxSize()
+                .padding(
+                    start = 14.dp,
+                    end = 14.dp,
+                    top = 0.dp,
+                    bottom = 8.dp
+                )
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(9.dp)
-            ) {
-                // LEFT LAUNCH PANEL
-                Surface(
-                    modifier = Modifier
-                        .weight(1.48f)
-                        .fillMaxHeight(),
-                    shape = RoundedCornerShape(30.dp),
-                    color = LmcColors.Glass
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(11.dp)
-                    ) {
-                        content()
-                    }
-                }
-
-                // RIGHT CHARACTER PANEL
-                Surface(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    shape = RoundedCornerShape(30.dp),
-                    color = LmcColors.Panel
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(10.dp)
-                    ) {
-                        sideContent()
-                    }
-                }
-            }
-
-            // BOTTOM NAVIGATION
+            // TOP BRAND PILL
             Surface(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(66.dp),
-                shape = RoundedCornerShape(27.dp),
-                color = LmcColors.Glass
+                    .width(182.dp)
+                    .height(48.dp),
+                shape = RoundedCornerShape(28.dp),
+                color = Color.White.copy(alpha = 0.91f),
+                shadowElevation = 3.dp
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(
-                            horizontal = 5.dp,
-                            vertical = 4.dp
-                        ),
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    LmcBottomItem(
-                        icon = R.drawable.ic_play_arrow_filled,
-                        label = "Play",
-                        selected = selectedItem == "Play",
-                        onClick = {
-                            selectedItem = "Play"
-                            onPlayClick()
-                        }
+                    Image(
+                        painter = painterResource(R.drawable.lmc_craft_logo),
+                        contentDescription = "LMC CRAFT logo",
+                        modifier = Modifier.size(37.dp),
+                        contentScale = ContentScale.Fit
                     )
 
-                    LmcBottomDivider()
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                    LmcBottomItem(
-                        icon = R.drawable.ic_person_filled,
-                        label = "Accounts",
-                        selected = selectedItem == "Accounts",
-                        onClick = {
-                            selectedItem = "Accounts"
-                            onAccountsClick()
+                    Column(
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "LMC CRAFT",
+                            color = LmcColors.Text,
+                            fontSize = 17.sp,
+                            lineHeight = 19.sp
+                        )
+                        Text(
+                            text = "Java Launcher",
+                            color = LmcColors.TextMuted,
+                            fontSize = 11.sp,
+                            lineHeight = 13.sp
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // LEFT NAVIGATION RAIL
+                Surface(
+                    modifier = Modifier
+                        .width(70.dp)
+                        .fillMaxHeight(),
+                    shape = RoundedCornerShape(34.dp),
+                    color = Color.White.copy(alpha = 0.88f),
+                    shadowElevation = 3.dp
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(vertical = 6.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        LmcRailIcon(
+                            icon = R.drawable.ic_home_filled,
+                            selected = true,
+                            onClick = onHomeClick
+                        )
+                        LmcRailIcon(
+                            icon = R.drawable.ic_sports_esports_filled,
+                            selected = false,
+                            onClick = onGameClick
+                        )
+                        LmcRailIcon(
+                            icon = R.drawable.ic_download_2_filled,
+                            selected = false,
+                            onClick = onDownloadsClick
+                        )
+                        LmcRailIcon(
+                            icon = R.drawable.ic_group_filled,
+                            selected = false,
+                            onClick = onAccountsClick
+                        )
+                        LmcRailIcon(
+                            icon = R.drawable.ic_folder_filled,
+                            selected = false,
+                            onClick = onFilesClick
+                        )
+                    }
+                }
+
+                // MAIN AREA
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        // LEFT LAUNCH PANEL
+                        Surface(
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(32.dp),
+                            color = LmcColors.Glass,
+                            shadowElevation = 3.dp
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(10.dp)
+                            ) {
+                                content()
+                            }
                         }
-                    )
 
-                    LmcBottomDivider()
-
-                    LmcBottomItem(
-                        icon = R.drawable.ic_checkroom,
-                        label = "Wardrobe",
-                        selected = selectedItem == "Wardrobe",
-                        onClick = {
-                            selectedItem = "Wardrobe"
-                            onWardrobeClick()
+                        // RIGHT CHARACTER PANEL
+                        Surface(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(32.dp),
+                            color = LmcColors.Panel,
+                            shadowElevation = 3.dp
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(10.dp)
+                            ) {
+                                sideContent()
+                            }
                         }
-                    )
+                    }
 
-                    LmcBottomDivider()
-
-                    LmcBottomItem(
-                        icon = R.drawable.ic_extension_outlined,
-                        label = "Mods",
-                        selected = selectedItem == "Mods",
-                        onClick = {
-                            selectedItem = "Mods"
-                            onModsClick()
+                    // BOTTOM NAVIGATION BAR
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(82.dp),
+                        shape = RoundedCornerShape(34.dp),
+                        color = Color.White.copy(alpha = 0.91f),
+                        shadowElevation = 3.dp
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(
+                                    horizontal = 5.dp,
+                                    vertical = 4.dp
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            LmcBottomItem(
+                                icon = R.drawable.ic_play_arrow_filled,
+                                label = "Play",
+                                selected = selectedItem == "Play",
+                                onClick = {
+                                    selectedItem = "Play"
+                                    onPlayClick()
+                                }
+                            )
+                            LmcBottomDivider()
+                            LmcBottomItem(
+                                icon = R.drawable.ic_person_filled,
+                                label = "Accounts",
+                                selected = selectedItem == "Accounts",
+                                onClick = {
+                                    selectedItem = "Accounts"
+                                    onAccountsClick()
+                                }
+                            )
+                            LmcBottomDivider()
+                            LmcBottomItem(
+                                icon = R.drawable.ic_checkroom,
+                                label = "Wardrobe",
+                                selected = selectedItem == "Wardrobe",
+                                onClick = {
+                                    selectedItem = "Wardrobe"
+                                    onWardrobeClick()
+                                }
+                            )
+                            LmcBottomDivider()
+                            LmcBottomItem(
+                                icon = R.drawable.ic_extension_outlined,
+                                label = "Mods",
+                                selected = selectedItem == "Mods",
+                                onClick = {
+                                    selectedItem = "Mods"
+                                    onModsClick()
+                                }
+                            )
+                            LmcBottomDivider()
+                            LmcBottomItem(
+                                icon = R.drawable.ic_settings_filled,
+                                label = "Settings",
+                                selected = selectedItem == "Settings",
+                                onClick = {
+                                    selectedItem = "Settings"
+                                    onSettingsClick()
+                                }
+                            )
                         }
-                    )
-
-                    LmcBottomDivider()
-
-                    LmcBottomItem(
-                        icon = R.drawable.ic_settings_filled,
-                        label = "Settings",
-                        selected = selectedItem == "Settings",
-                        onClick = {
-                            selectedItem = "Settings"
-                            onSettingsClick()
-                        }
-                    )
+                    }
                 }
             }
         }
@@ -259,7 +312,7 @@ private fun LmcRailIcon(
 ) {
     Box(
         modifier = Modifier
-            .size(46.dp)
+            .size(52.dp)
             .clip(CircleShape)
             .background(
                 if (selected) LmcColors.Blue
@@ -271,9 +324,8 @@ private fun LmcRailIcon(
         Icon(
             painter = painterResource(icon),
             contentDescription = null,
-            modifier = Modifier.size(23.dp),
-            tint = if (selected) Color.White
-            else LmcColors.Text
+            modifier = Modifier.size(25.dp),
+            tint = if (selected) Color.White else LmcColors.Text
         )
     }
 }
@@ -289,7 +341,7 @@ private fun RowScope.LmcBottomItem(
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
-            .clip(RoundedCornerShape(22.dp))
+            .clip(RoundedCornerShape(25.dp))
             .background(
                 if (selected) LmcColors.Blue
                 else Color.Transparent
@@ -301,18 +353,16 @@ private fun RowScope.LmcBottomItem(
         Icon(
             painter = painterResource(icon),
             contentDescription = label,
-            modifier = Modifier.size(21.dp),
-            tint = if (selected) Color.White
-            else LmcColors.Text
+            modifier = Modifier.size(22.dp),
+            tint = if (selected) Color.White else LmcColors.Text
         )
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(3.dp))
 
         Text(
             text = label,
-            color = if (selected) Color.White
-            else LmcColors.Text,
-            fontSize = 14.sp,
+            color = if (selected) Color.White else LmcColors.Text,
+            fontSize = 15.sp,
             maxLines = 1
         )
     }
@@ -323,7 +373,7 @@ private fun LmcBottomDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)
-            .height(25.dp)
+            .height(34.dp)
             .background(LmcColors.Divider)
     )
 }
