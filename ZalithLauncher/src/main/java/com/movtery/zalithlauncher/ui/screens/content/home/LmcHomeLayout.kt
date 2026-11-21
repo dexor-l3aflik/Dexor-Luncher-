@@ -29,8 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.movtery.zalithlauncher.R
@@ -38,7 +36,8 @@ import com.movtery.zalithlauncher.R
 private val LmcBlue = Color(0xFF0868F5)
 private val LmcSky = Color(0xFFB8D9FF)
 private val LmcText = Color(0xFF405C79)
-private val LmcGlass = Color(0xEFFFFFFF)
+private val LmcGlass = Color(0xF2FFFFFF)
+private val LmcPanel = Color(0xFFDCEEFF)
 
 @Composable
 fun LmcHomeLayout(
@@ -61,21 +60,22 @@ fun LmcHomeLayout(
         modifier = modifier
             .fillMaxSize()
             .background(LmcSky)
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+
         // LEFT SIDEBAR
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(64.dp),
-            shape = RoundedCornerShape(32.dp),
+                .width(58.dp),
+            shape = RoundedCornerShape(28.dp),
             color = LmcGlass
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -111,66 +111,72 @@ fun LmcHomeLayout(
             }
         }
 
-        // CENTER + CHARACTER PANEL
+        // MAIN AREA
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
+
+            // CONTENT + CHARACTER
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+
+                // CENTER LAUNCH PANEL
                 Surface(
                     modifier = Modifier
                         .weight(1.65f)
                         .fillMaxHeight(),
-                    shape = RoundedCornerShape(32.dp),
+                    shape = RoundedCornerShape(28.dp),
                     color = LmcGlass
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(12.dp)
+                            .padding(9.dp)
                     ) {
                         content()
                     }
                 }
 
+                // RIGHT CHARACTER PANEL
                 Surface(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
-                    shape = RoundedCornerShape(32.dp),
-                    color = Color(0xFFD6EDFF)
+                    shape = RoundedCornerShape(28.dp),
+                    color = LmcPanel
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(12.dp)
+                            .padding(9.dp)
                     ) {
                         sideContent()
                     }
                 }
             }
 
-            // BOTTOM BAR
+            // COMPACT BOTTOM NAVIGATION
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(76.dp),
-                shape = RoundedCornerShape(32.dp),
+                    .height(62.dp),
+                shape = RoundedCornerShape(26.dp),
                 color = LmcGlass
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 6.dp, vertical = 5.dp),
+                        .padding(horizontal = 5.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     LmcBottomItem(
                         icon = R.drawable.ic_play_arrow_filled,
                         label = "Play",
@@ -234,20 +240,23 @@ private fun LmcRailIcon(
 ) {
     Surface(
         modifier = Modifier
-            .size(52.dp)
+            .size(46.dp)
             .clip(CircleShape)
             .clickable(onClick = onClick),
         shape = CircleShape,
         color = if (selected) LmcBlue else Color.Transparent
     ) {
-        Icon(
-            painter = painterResource(icon),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(13.dp)
-                .size(26.dp),
-            tint = if (selected) Color.White else LmcText
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                modifier = Modifier.size(23.dp),
+                tint = if (selected) Color.White else LmcText
+            )
+        }
     }
 }
 
@@ -262,7 +271,7 @@ private fun RowScope.LmcBottomItem(
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
-            .clip(RoundedCornerShape(26.dp))
+            .clip(RoundedCornerShape(22.dp))
             .background(
                 if (selected) LmcBlue
                 else Color.Transparent
@@ -274,11 +283,11 @@ private fun RowScope.LmcBottomItem(
         Icon(
             painter = painterResource(icon),
             contentDescription = label,
-            modifier = Modifier.size(25.dp),
+            modifier = Modifier.size(21.dp),
             tint = if (selected) Color.White else LmcText
         )
 
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(1.dp))
 
         Text(
             text = label,
