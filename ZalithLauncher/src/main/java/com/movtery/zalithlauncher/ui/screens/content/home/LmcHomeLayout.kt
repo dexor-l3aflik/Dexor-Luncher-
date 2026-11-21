@@ -1,4 +1,3 @@
-
 package com.movtery.zalithlauncher.ui.screens.content.home
 
 import androidx.compose.foundation.background
@@ -32,13 +31,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.movtery.zalithlauncher.R
 
-private val LmcBlue = Color(0xFF0868F5)
-private val LmcSky = Color(0xFFB8D9FF)
-private val LmcText = Color(0xFF405C79)
-private val LmcGlass = Color(0xF2FFFFFF)
-private val LmcPanel = Color(0xFFDCEEFF)
+object LmcColors {
+    val Sky = Color(0xFFB9D9FF)
+    val SkyLight = Color(0xFFDCEEFF)
+    val Blue = Color(0xFF0868F5)
+    val BlueDark = Color(0xFF0757D5)
+    val Text = Color(0xFF405C79)
+    val TextMuted = Color(0xFF7189A2)
+    val Glass = Color(0xF7FFFFFF)
+    val Panel = Color(0xFFE4F1FF)
+    val Divider = Color(0xFFD3E3F4)
+    val TopBar = Color(0xFFAED2FA)
+}
 
 @Composable
 fun LmcHomeLayout(
@@ -60,21 +67,27 @@ fun LmcHomeLayout(
     Row(
         modifier = modifier
             .fillMaxSize()
-            .background(LmcSky)
-            .padding(6.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .background(LmcColors.Sky)
+            .padding(
+                start = 9.dp,
+                end = 9.dp,
+                top = 9.dp,
+                bottom = 7.dp
+            ),
+        horizontalArrangement = Arrangement.spacedBy(9.dp)
     ) {
+        // LEFT NAVIGATION RAIL
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
-                .width(58.dp),
+                .width(62.dp),
             shape = RoundedCornerShape(28.dp),
-            color = LmcGlass
+            color = LmcColors.Glass
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(vertical = 5.dp),
+                    .padding(vertical = 7.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -110,62 +123,69 @@ fun LmcHomeLayout(
             }
         }
 
+        // MAIN CONTENT
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(7.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(9.dp)
             ) {
+                // LEFT LAUNCH PANEL
                 Surface(
                     modifier = Modifier
-                        .weight(1.65f)
+                        .weight(1.48f)
                         .fillMaxHeight(),
-                    shape = RoundedCornerShape(28.dp),
-                    color = LmcGlass
+                    shape = RoundedCornerShape(30.dp),
+                    color = LmcColors.Glass
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(9.dp)
+                            .padding(11.dp)
                     ) {
                         content()
                     }
                 }
 
+                // RIGHT CHARACTER PANEL
                 Surface(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
-                    shape = RoundedCornerShape(28.dp),
-                    color = LmcPanel
+                    shape = RoundedCornerShape(30.dp),
+                    color = LmcColors.Panel
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(9.dp)
+                            .padding(10.dp)
                     ) {
                         sideContent()
                     }
                 }
             }
 
+            // BOTTOM NAVIGATION
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(62.dp),
-                shape = RoundedCornerShape(26.dp),
-                color = LmcGlass
+                    .height(66.dp),
+                shape = RoundedCornerShape(27.dp),
+                color = LmcColors.Glass
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 5.dp, vertical = 4.dp),
+                        .padding(
+                            horizontal = 5.dp,
+                            vertical = 4.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     LmcBottomItem(
@@ -178,6 +198,8 @@ fun LmcHomeLayout(
                         }
                     )
 
+                    LmcBottomDivider()
+
                     LmcBottomItem(
                         icon = R.drawable.ic_person_filled,
                         label = "Accounts",
@@ -187,6 +209,8 @@ fun LmcHomeLayout(
                             onAccountsClick()
                         }
                     )
+
+                    LmcBottomDivider()
 
                     LmcBottomItem(
                         icon = R.drawable.ic_checkroom,
@@ -198,6 +222,8 @@ fun LmcHomeLayout(
                         }
                     )
 
+                    LmcBottomDivider()
+
                     LmcBottomItem(
                         icon = R.drawable.ic_extension_outlined,
                         label = "Mods",
@@ -207,6 +233,8 @@ fun LmcHomeLayout(
                             onModsClick()
                         }
                     )
+
+                    LmcBottomDivider()
 
                     LmcBottomItem(
                         icon = R.drawable.ic_settings_filled,
@@ -229,25 +257,24 @@ private fun LmcRailIcon(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    Surface(
+    Box(
         modifier = Modifier
             .size(46.dp)
             .clip(CircleShape)
-            .clickable(onClick = onClick),
-        shape = CircleShape,
-        color = if (selected) LmcBlue else Color.Transparent
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = null,
-                modifier = Modifier.size(23.dp),
-                tint = if (selected) Color.White else LmcText
+            .background(
+                if (selected) LmcColors.Blue
+                else Color.Transparent
             )
-        }
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(23.dp),
+            tint = if (selected) Color.White
+            else LmcColors.Text
+        )
     }
 }
 
@@ -264,7 +291,7 @@ private fun RowScope.LmcBottomItem(
             .fillMaxHeight()
             .clip(RoundedCornerShape(22.dp))
             .background(
-                if (selected) LmcBlue
+                if (selected) LmcColors.Blue
                 else Color.Transparent
             )
             .clickable(onClick = onClick),
@@ -275,14 +302,28 @@ private fun RowScope.LmcBottomItem(
             painter = painterResource(icon),
             contentDescription = label,
             modifier = Modifier.size(21.dp),
-            tint = if (selected) Color.White else LmcText
+            tint = if (selected) Color.White
+            else LmcColors.Text
         )
 
-        Spacer(modifier = Modifier.height(1.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
             text = label,
-            color = if (selected) Color.White else LmcText
+            color = if (selected) Color.White
+            else LmcColors.Text,
+            fontSize = 14.sp,
+            maxLines = 1
         )
     }
+}
+
+@Composable
+private fun LmcBottomDivider() {
+    Box(
+        modifier = Modifier
+            .width(1.dp)
+            .height(25.dp)
+            .background(LmcColors.Divider)
+    )
 }
