@@ -4,6 +4,7 @@ package com.movtery.zalithlauncher.ui.screens.content.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -63,8 +64,6 @@ fun LmcHomeLayout(
             .padding(6.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-
-        // LEFT SIDEBAR
         Surface(
             modifier = Modifier
                 .fillMaxHeight()
@@ -111,23 +110,18 @@ fun LmcHomeLayout(
             }
         }
 
-        // MAIN AREA
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f),
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-
-            // CONTENT + CHARACTER
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
-                // CENTER LAUNCH PANEL
                 Surface(
                     modifier = Modifier
                         .weight(1.65f)
@@ -144,7 +138,6 @@ fun LmcHomeLayout(
                     }
                 }
 
-                // RIGHT CHARACTER PANEL
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -162,7 +155,6 @@ fun LmcHomeLayout(
                 }
             }
 
-            // COMPACT BOTTOM NAVIGATION
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -176,7 +168,6 @@ fun LmcHomeLayout(
                         .padding(horizontal = 5.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
                     LmcBottomItem(
                         icon = R.drawable.ic_play_arrow_filled,
                         label = "Play",
