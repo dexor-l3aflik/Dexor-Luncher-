@@ -30,7 +30,6 @@ import com.movtery.layer_controller.updateLayoutToNew
 import com.movtery.layer_controller.utils.layoutJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.int
@@ -140,7 +139,11 @@ fun loadLayoutFromString(jsonString: String): ControlLayout {
             null
         }
 
-        var layout = layoutJson.decodeFromJsonElement<ControlLayout>(normalizedJsonObject)
+        // FIX: pass both serializer and JSON element to the API.
+        var layout = layoutJson.decodeFromJsonElement(
+            ControlLayout.serializer(),
+            normalizedJsonObject
+        )
         if (version < EDITOR_VERSION) {
             layout = updateLayoutToNew(layout)
         }
