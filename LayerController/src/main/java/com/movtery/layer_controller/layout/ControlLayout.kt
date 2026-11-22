@@ -10,12 +10,14 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
  */
 
 package com.movtery.layer_controller.layout
+
 
 import com.movtery.layer_controller.EDITOR_VERSION
 import com.movtery.layer_controller.data.ButtonStyle
@@ -113,16 +115,21 @@ fun loadLayoutFromFile(file: File): ControlLayout {
 fun loadLayoutFromString(jsonString: String): ControlLayout {
     val jsonObject = layoutJson.decodeFromString<JsonObject>(jsonString)
 
-    // Some layout files omit editorVersion. Assume the current format
-    // and add the missing field so deserialization can proceed.
+    // Older/custom layouts may omit editorVersion. Treat them as the current format.
     val version = jsonObject["editorVersion"]?.jsonPrimitive?.int ?: EDITOR_VERSION
 
     if (version <= EDITOR_VERSION) {
-        val normalizedJsonObject = if (jsonObject["editorVersion"] == null) {
-            JsonObject(jsonObject + ("editorVersion" to JsonPrimitive(version)))
-        } else {
-            jsonObject
-        }
+        // Normalize required metadata before deserialization. Keep all supplied
+        // fields and only fill in missing editorVersion/info values.
+        val defaultInfoElement = layoutJson.encodeToJsonElement(
+            Info.serializer(),
+            EmptyLayoutInfo
+        )
+        val normalizedJsonObject = JsonObject(
+            jsonObject +
+                    ("editorVersion" to JsonPrimitive(version)) +
+                    ("info" to (jsonObject["info"] ?: defaultInfoElement))
+        )
 
         val legacyJoystickStyle = if (version < 12) {
             jsonObject["special"]?.let { specialElement ->
@@ -139,7 +146,6 @@ fun loadLayoutFromString(jsonString: String): ControlLayout {
             null
         }
 
-        // FIX: pass both serializer and JSON element to the API.
         var layout = layoutJson.decodeFromJsonElement(
             ControlLayout.serializer(),
             normalizedJsonObject
