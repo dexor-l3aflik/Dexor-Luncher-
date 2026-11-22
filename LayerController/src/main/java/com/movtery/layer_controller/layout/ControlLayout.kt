@@ -10,7 +10,6 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
@@ -33,15 +32,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
 
 /**
- * 描述一个控制布局结构
- * @param info 控制布局基本信息
- * @param layers 控制层级列表
- * @param editorVersion 使用编辑器版本
+ * Describes a control layout structure.
+ * @param info Basic layout information
+ * @param layers Control layers
+ * @param editorVersion Editor version used
  */
 @Serializable
 data class ControlLayout(
@@ -55,7 +55,7 @@ data class ControlLayout(
     val joystickStyles: List<JoystickStyle> = emptyList(),
     @SerialName("editorVersion")
     val editorVersion: Int
-): Modifiable<ControlLayout> {
+) : Modifiable<ControlLayout> {
     @Serializable
     data class Info(
         @SerialName("name")
@@ -68,7 +68,7 @@ data class ControlLayout(
         val versionCode: Int,
         @SerialName("versionName")
         val versionName: String
-    ): Modifiable<Info> {
+    ) : Modifiable<Info> {
         override fun isModified(other: Info): Boolean {
             return other.name.isModified(this.name) ||
                     other.author.isModified(this.author) ||
@@ -100,11 +100,11 @@ val EmptyControlLayout = ControlLayout(
     info = EmptyLayoutInfo,
     layers = emptyList(),
     styles = emptyList(),
-    joystickStyles = emptyList(),
+    joystickStyles = emptyList()
 )
 
 /**
- * 从文件加载控制布局配置（检查版本号，大于编辑器版本则抛出`IllegalArgumentException`）
+ * Loads a control layout from file and checks its editor version.
  */
 fun loadLayoutFromFile(file: File): ControlLayout {
     val jsonString = file.readText()
@@ -113,25 +113,39 @@ fun loadLayoutFromFile(file: File): ControlLayout {
 
 fun loadLayoutFromString(jsonString: String): ControlLayout {
     val jsonObject = layoutJson.decodeFromString<JsonObject>(jsonString)
-    if (jsonObject["editorVersion"] == null) throw SerializationException("The file does not contain the key \"editorVersion\".")
-    val version = jsonObject["editorVersion"]!!.jsonPrimitive.int
+
+    // Some layout files omit editorVersion. Assume the current format
+    // and add the missing field so deserialization can proceed.
+    val version = jsonObject["editorVersion"]?.jsonPrimitive?.int ?: EDITOR_VERSION
+
     if (version <= EDITOR_VERSION) {
+        val normalizedJsonObject = if (jsonObject["editorVersion"] == null) {
+            JsonObject(jsonObject + ("editorVersion" to JsonPrimitive(version)))
+        } else {
+            jsonObject
+        }
+
         val legacyJoystickStyle = if (version < 12) {
             jsonObject["special"]?.let { specialElement ->
-                //在反序列化前尝试提取旧版 special 字段
                 try {
-                    layoutJson.decodeFromJsonElement(LegacySpecial.serializer(), specialElement).joystickStyle?.toJoystickStyle()
+                    layoutJson.decodeFromJsonElement(
+                        LegacySpecial.serializer(),
+                        specialElement
+                    ).joystickStyle?.toJoystickStyle()
                 } catch (_: Exception) {
                     null
                 }
             }
-        } else null
+        } else {
+            null
+        }
 
-        var layout = layoutJson.decodeFromString<ControlLayout>(jsonString)
-        if (version < EDITOR_VERSION) layout = updateLayoutToNew(layout)
+        var layout = layoutJson.decodeFromJsonElement<ControlLayout>(normalizedJsonObject)
+        if (version < EDITOR_VERSION) {
+            layout = updateLayoutToNew(layout)
+        }
 
         if (legacyJoystickStyle != null) {
-            //迁移至新版摇杆样式列表
             layout = layout.copy(
                 joystickStyles = layout.joystickStyles + legacyJoystickStyle
             )
@@ -144,7 +158,7 @@ fun loadLayoutFromString(jsonString: String): ControlLayout {
 }
 
 /**
- * 从文件加载控制布局配置（不检查版本号）
+ * Loads a control layout from file without checking the version.
  */
 fun loadLayoutFromFileUncheck(file: File): ControlLayout {
     val jsonString = file.readText()
