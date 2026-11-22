@@ -78,56 +78,57 @@ fun LmcHomeLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    start = 14.dp,
-                    end = 14.dp,
-                    top = 0.dp,
+                    start = 10.dp,
+                    end = 12.dp,
+                    top = 2.dp,
                     bottom = 8.dp
                 )
         ) {
-            // TOP BRAND PILL
+            // COMPACT BRAND PILL: target reference is approximately 138 x 35 dp.
             Surface(
                 modifier = Modifier
-                    .width(182.dp)
-                    .height(48.dp),
-                shape = RoundedCornerShape(28.dp),
-                color = Color.White.copy(alpha = 0.91f),
-                shadowElevation = 3.dp
+                    .padding(start = 4.dp)
+                    .width(138.dp)
+                    .height(35.dp),
+                shape = RoundedCornerShape(25.dp),
+                color = Color.White.copy(alpha = 0.93f),
+                shadowElevation = 2.dp
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                        .padding(horizontal = 8.dp, vertical = 3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
                         painter = painterResource(R.drawable.lmc_craft_logo),
                         contentDescription = "LMC CRAFT logo",
-                        modifier = Modifier.size(37.dp),
+                        modifier = Modifier.size(29.dp),
                         contentScale = ContentScale.Fit
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(7.dp))
 
-                    Column(
-                        verticalArrangement = Arrangement.Center
-                    ) {
+                    Column(verticalArrangement = Arrangement.Center) {
                         Text(
                             text = "LMC CRAFT",
                             color = LmcColors.Text,
-                            fontSize = 17.sp,
-                            lineHeight = 19.sp
+                            fontSize = 15.sp,
+                            lineHeight = 17.sp,
+                            maxLines = 1
                         )
                         Text(
                             text = "Java Launcher",
                             color = LmcColors.TextMuted,
-                            fontSize = 11.sp,
-                            lineHeight = 13.sp
+                            fontSize = 10.sp,
+                            lineHeight = 11.sp,
+                            maxLines = 1
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier
@@ -138,16 +139,16 @@ fun LmcHomeLayout(
                 // LEFT NAVIGATION RAIL
                 Surface(
                     modifier = Modifier
-                        .width(70.dp)
+                        .width(54.dp)
                         .fillMaxHeight(),
-                    shape = RoundedCornerShape(34.dp),
-                    color = Color.White.copy(alpha = 0.88f),
-                    shadowElevation = 3.dp
+                    shape = RoundedCornerShape(30.dp),
+                    color = Color.White.copy(alpha = 0.90f),
+                    shadowElevation = 2.dp
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(vertical = 6.dp),
+                            .padding(vertical = 5.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
@@ -179,72 +180,67 @@ fun LmcHomeLayout(
                     }
                 }
 
-                // MAIN AREA
+                // MAIN CONTENT AREA
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        // LEFT LAUNCH PANEL
                         Surface(
                             modifier = Modifier
                                 .weight(1.5f)
                                 .fillMaxHeight(),
-                            shape = RoundedCornerShape(32.dp),
+                            shape = RoundedCornerShape(31.dp),
                             color = LmcColors.Glass,
-                            shadowElevation = 3.dp
+                            shadowElevation = 2.dp
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(10.dp)
+                                    .padding(9.dp)
                             ) {
                                 content()
                             }
                         }
 
-                        // RIGHT CHARACTER PANEL
                         Surface(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight(),
-                            shape = RoundedCornerShape(32.dp),
+                            shape = RoundedCornerShape(31.dp),
                             color = LmcColors.Panel,
-                            shadowElevation = 3.dp
+                            shadowElevation = 2.dp
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(10.dp)
+                                    .padding(9.dp)
                             ) {
                                 sideContent()
                             }
                         }
                     }
 
-                    // BOTTOM NAVIGATION BAR
+                    // BOTTOM NAVIGATION: target height approximately 66 dp.
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(82.dp),
-                        shape = RoundedCornerShape(34.dp),
-                        color = Color.White.copy(alpha = 0.91f),
-                        shadowElevation = 3.dp
+                            .height(66.dp),
+                        shape = RoundedCornerShape(31.dp),
+                        color = Color.White.copy(alpha = 0.93f),
+                        shadowElevation = 2.dp
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(
-                                    horizontal = 5.dp,
-                                    vertical = 4.dp
-                                ),
+                                .padding(horizontal = 5.dp, vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             LmcBottomItem(
@@ -312,19 +308,16 @@ private fun LmcRailIcon(
 ) {
     Box(
         modifier = Modifier
-            .size(52.dp)
+            .size(46.dp)
             .clip(CircleShape)
-            .background(
-                if (selected) LmcColors.Blue
-                else Color.Transparent
-            )
+            .background(if (selected) LmcColors.Blue else Color.Transparent)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(icon),
             contentDescription = null,
-            modifier = Modifier.size(25.dp),
+            modifier = Modifier.size(23.dp),
             tint = if (selected) Color.White else LmcColors.Text
         )
     }
@@ -341,11 +334,8 @@ private fun RowScope.LmcBottomItem(
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
-            .clip(RoundedCornerShape(25.dp))
-            .background(
-                if (selected) LmcColors.Blue
-                else Color.Transparent
-            )
+            .clip(RoundedCornerShape(24.dp))
+            .background(if (selected) LmcColors.Blue else Color.Transparent)
             .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -353,16 +343,16 @@ private fun RowScope.LmcBottomItem(
         Icon(
             painter = painterResource(icon),
             contentDescription = label,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(21.dp),
             tint = if (selected) Color.White else LmcColors.Text
         )
 
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
             text = label,
             color = if (selected) Color.White else LmcColors.Text,
-            fontSize = 15.sp,
+            fontSize = 13.sp,
             maxLines = 1
         )
     }
@@ -373,7 +363,7 @@ private fun LmcBottomDivider() {
     Box(
         modifier = Modifier
             .width(1.dp)
-            .height(34.dp)
+            .height(29.dp)
             .background(LmcColors.Divider)
     )
 }
