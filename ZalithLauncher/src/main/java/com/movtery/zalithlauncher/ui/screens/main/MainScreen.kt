@@ -714,7 +714,7 @@ private fun NavigationUI(
                 entry<NestedNavKey.Download> { key ->
                     DownloadScreen(
                         key = key,
-                        backStackViewModel = screenBackStackModel,
+                        backScreenViewModel = screenBackStackModel,
                         eventViewModel = eventViewModel,
                         modpackImportViewModel = modpackImportViewModel,
                         submitError = submitError
