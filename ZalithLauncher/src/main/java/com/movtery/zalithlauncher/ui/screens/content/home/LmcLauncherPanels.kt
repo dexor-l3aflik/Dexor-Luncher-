@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,39 +68,32 @@ fun LmcLaunchPanel(
     val version by VersionsManager.currentVersion.collectAsStateWithLifecycle()
     val versions by VersionsManager.versions.collectAsStateWithLifecycle()
     val isRefreshing by VersionsManager.isRefreshing.collectAsStateWithLifecycle()
-
     var showVersionMenu by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(
-                horizontal = 17.dp,
-                vertical = 10.dp
-            ),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+            .padding(horizontal = 17.dp, vertical = 3.dp),
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         // ACCOUNT PROFILE
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(58.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .height(44.dp)
+                .clip(RoundedCornerShape(18.dp))
                 .clickable(onClick = onAccountClick)
-                .padding(horizontal = 5.dp),
+                .padding(horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(13.dp)
+            horizontalArrangement = Arrangement.spacedBy(11.dp)
         ) {
             if (account != null) {
-                PlayerFace(
-                    account = account,
-                    avatarSize = 56.dp
-                )
+                PlayerFace(account = account, avatarSize = 43.dp)
             } else {
                 Box(
                     modifier = Modifier
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(43.dp)
+                        .clip(RoundedCornerShape(12.dp))
                         .background(LmcColors.SkyLight),
                     contentAlignment = Alignment.Center
                 ) {
@@ -107,7 +101,7 @@ fun LmcLaunchPanel(
                         painter = painterResource(R.drawable.ic_add),
                         contentDescription = "Add account",
                         tint = LmcColors.Blue,
-                        modifier = Modifier.size(29.dp)
+                        modifier = Modifier.size(26.dp)
                     )
                 }
             }
@@ -119,18 +113,17 @@ fun LmcLaunchPanel(
                 Text(
                     text = if (account == null) "Welcome" else "Welcome Back,",
                     color = LmcColors.Text,
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     maxLines = 1
                 )
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
                         text = account?.username ?: "Add Account",
                         color = LmcColors.Text,
-                        fontSize = 24.sp,
+                        fontSize = 21.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -139,7 +132,7 @@ fun LmcLaunchPanel(
                     if (account != null) {
                         Box(
                             modifier = Modifier
-                                .size(19.dp)
+                                .size(17.dp)
                                 .clip(CircleShape)
                                 .background(LmcColors.Blue),
                             contentAlignment = Alignment.Center
@@ -148,9 +141,7 @@ fun LmcLaunchPanel(
                                 painter = painterResource(R.drawable.ic_check),
                                 contentDescription = "Active account",
                                 tint = Color.White,
-                                modifier = Modifier
-                                    .size(12.dp)
-                                    .padding(1.dp)
+                                modifier = Modifier.size(11.dp)
                             )
                         }
                     }
@@ -159,9 +150,9 @@ fun LmcLaunchPanel(
 
             Box(
                 modifier = Modifier
-                    .size(45.dp)
+                    .size(36.dp)
                     .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.92f))
+                    .background(Color.White.copy(alpha = 0.94f))
                     .clickable(onClick = onAccountClick),
                 contentAlignment = Alignment.Center
             ) {
@@ -169,7 +160,7 @@ fun LmcLaunchPanel(
                     painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
                     contentDescription = "Account options",
                     tint = LmcColors.Text,
-                    modifier = Modifier.size(28.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
@@ -179,27 +170,28 @@ fun LmcLaunchPanel(
         Text(
             text = "Minecraft Version",
             color = LmcColors.Text,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1
         )
 
-        // EDITION SELECTOR - JAVA IS THE ACTIVE SUPPORTED EDITION.
+        // JAVA IS ACTIVE. RUST IS DISPLAYED AS A FUTURE/UNAVAILABLE OPTION.
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(43.dp),
-            shape = RoundedCornerShape(24.dp),
+                .height(32.dp),
+            shape = RoundedCornerShape(22.dp),
             color = LmcColors.SkyLight
         ) {
             Row(
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier.padding(3.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .clip(RoundedCornerShape(22.dp))
+                        .clip(RoundedCornerShape(20.dp))
                         .background(LmcColors.Blue),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -208,13 +200,13 @@ fun LmcLaunchPanel(
                         painter = painterResource(R.drawable.ic_coffee_filled),
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(17.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Java Edition",
                         color = Color.White,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1
                     )
@@ -230,13 +222,13 @@ fun LmcLaunchPanel(
                     Text(
                         text = "⚛",
                         color = LmcColors.TextMuted,
-                        fontSize = 19.sp
+                        fontSize = 16.sp
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Rust Edition",
                         color = LmcColors.TextMuted,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         maxLines = 1
                     )
                 }
@@ -248,24 +240,24 @@ fun LmcLaunchPanel(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(58.dp),
-                shape = RoundedCornerShape(22.dp),
+                    .height(46.dp),
+                shape = RoundedCornerShape(18.dp),
                 color = LmcColors.SkyLight
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(22.dp))
+                        .clip(RoundedCornerShape(18.dp))
                         .clickable { showVersionMenu = true }
-                        .padding(horizontal = 12.dp, vertical = 7.dp),
+                        .padding(horizontal = 10.dp, vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     VersionIconImage(
                         version = version,
-                        modifier = Modifier.size(42.dp)
+                        modifier = Modifier.size(34.dp)
                     )
 
-                    Spacer(modifier = Modifier.width(11.dp))
+                    Spacer(modifier = Modifier.width(9.dp))
 
                     Column(
                         modifier = Modifier.weight(1f),
@@ -274,7 +266,7 @@ fun LmcLaunchPanel(
                         Text(
                             text = version?.getVersionName() ?: "No installed versions",
                             color = LmcColors.Text,
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -292,7 +284,7 @@ fun LmcLaunchPanel(
                                 } ?: "No installed versions"
                             },
                             color = LmcColors.TextMuted,
-                            fontSize = 12.sp,
+                            fontSize = 10.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -302,7 +294,7 @@ fun LmcLaunchPanel(
                         painter = painterResource(R.drawable.ic_arrow_drop_down_rounded),
                         contentDescription = "Choose version",
                         tint = LmcColors.Text,
-                        modifier = Modifier.size(27.dp)
+                        modifier = Modifier.size(23.dp)
                     )
                 }
             }
@@ -381,12 +373,12 @@ fun LmcLaunchPanel(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
-                .clip(RoundedCornerShape(24.dp))
+                .height(28.dp)
+                .clip(RoundedCornerShape(22.dp))
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFF4CB9FF),
+                            Color(0xFF55BDFF),
                             LmcColors.Blue,
                             LmcColors.BlueDark
                         )
@@ -403,21 +395,21 @@ fun LmcLaunchPanel(
                     painter = painterResource(R.drawable.ic_play_arrow_filled),
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(25.dp)
+                    modifier = Modifier.size(21.dp)
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(9.dp))
                 Text(
                     text = "Launch",
                     color = Color.White,
-                    fontSize = 21.sp,
+                    fontSize = 19.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(9.dp))
                 Icon(
                     painter = painterResource(R.drawable.ic_dashboard_filled),
                     contentDescription = null,
                     tint = Color.White.copy(alpha = 0.82f),
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(19.dp)
                 )
             }
         }
@@ -431,7 +423,6 @@ fun LmcCharacterPreview(
     modifier: Modifier = Modifier
 ) {
     val refreshWardrobe by AccountsManager.refreshWardrobe.collectAsStateWithLifecycle()
-
     val armModel = account?.skinModelType?.toArmModel()
     val skinStamp = account?.getSkinFile()?.lastModified()
     val capeStamp = account?.getCapeFile()?.lastModified()
@@ -468,32 +459,32 @@ fun LmcCharacterPreview(
     var showFullscreen by remember { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxSize()) {
-        // CHARACTER PANEL HEADER
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 10.dp, end = 4.dp, top = 5.dp, bottom = 5.dp),
+                .height(38.dp)
+                .padding(start = 7.dp, end = 3.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(19.dp),
                 color = Color(0xFFDCEEFF)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_checkroom),
                         contentDescription = null,
                         tint = LmcColors.Text,
-                        modifier = Modifier.size(19.dp)
+                        modifier = Modifier.size(17.dp)
                     )
-                    Spacer(modifier = Modifier.width(7.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "Character",
                         color = LmcColors.Text,
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -501,26 +492,38 @@ fun LmcCharacterPreview(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            IconButton(onClick = { showFullscreen = true }) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .clickable { showFullscreen = true },
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_fullscreen_exit),
                     contentDescription = "Expand character",
                     tint = LmcColors.Text,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(22.dp)
                 )
             }
         }
 
-        // LIVE 3D PLAYER MODEL
+        // PetLib scales from viewport width. This height-first 44:35 viewport
+        // fits the player's projected height without cropping the head or feet.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(horizontal = 5.dp, vertical = 3.dp),
+                .padding(horizontal = 3.dp, vertical = 2.dp),
             contentAlignment = Alignment.Center
         ) {
             PetModelView(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(
+                        ratio = 44f / 35f,
+                        matchHeightConstraintsFirst = true
+                    ),
                 skin = skinBytes,
                 cape = capeBytes,
                 arm = armModel,
@@ -531,11 +534,10 @@ fun LmcCharacterPreview(
             )
         }
 
-        // CHARACTER ACTION BUTTONS
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 5.dp, bottom = 6.dp),
+                .padding(top = 3.dp, bottom = 3.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -544,7 +546,7 @@ fun LmcCharacterPreview(
                 description = "Refresh skin",
                 onClick = { AccountsManager.refreshWardrobe() }
             )
-            Spacer(modifier = Modifier.width(15.dp))
+            Spacer(modifier = Modifier.width(13.dp))
             LmcCharacterAction(
                 icon = R.drawable.ic_checkroom,
                 description = "Open wardrobe",
@@ -559,13 +561,13 @@ fun LmcCharacterPreview(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(490.dp),
-                shape = RoundedCornerShape(28.dp),
+                shape = RoundedCornerShape(27.dp),
                 color = LmcColors.Glass
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(13.dp)
+                        .padding(12.dp)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -594,7 +596,12 @@ fun LmcCharacterPreview(
                         contentAlignment = Alignment.Center
                     ) {
                         PetModelView(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .aspectRatio(
+                                    ratio = 44f / 35f,
+                                    matchHeightConstraintsFirst = true
+                                ),
                             skin = skinBytes,
                             cape = capeBytes,
                             arm = armModel,
@@ -618,9 +625,9 @@ private fun LmcCharacterAction(
 ) {
     Box(
         modifier = Modifier
-            .size(50.dp)
+            .size(39.dp)
             .clip(CircleShape)
-            .background(Color.White.copy(alpha = 0.93f))
+            .background(Color.White.copy(alpha = 0.94f))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -628,7 +635,7 @@ private fun LmcCharacterAction(
             painter = painterResource(icon),
             contentDescription = description,
             tint = LmcColors.Text,
-            modifier = Modifier.size(25.dp)
+            modifier = Modifier.size(22.dp)
         )
     }
 }
