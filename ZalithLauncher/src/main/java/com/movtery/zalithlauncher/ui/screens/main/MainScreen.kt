@@ -1,12 +1,11 @@
-
 /*
  * Zalith Launcher 2
  * Copyright (C) 2025-2026 MovTery <movtery228@qq.com> and contributors
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
  */
 
 package com.movtery.zalithlauncher.ui.screens.main
@@ -144,20 +143,26 @@ fun MainScreen(
     }
 
     val toMainScreen: () -> Unit = {
-        screenBackStackModel.mainScreen.clearWith(NormalNavKey.LauncherMain)
+        screenBackStackModel.mainScreen.clearWith(
+            NormalNavKey.LauncherMain
+        )
     }
 
     val mainScreenKey = screenBackStackModel.mainScreen.currentKey
+
     val inLauncherScreen =
         mainScreenKey == null || mainScreenKey is NormalNavKey.LauncherMain
 
     val isBackgroundValid = LocalBackgroundViewModel.current?.isValid == true
+
     val launcherBackgroundOpacity =
         LauncherSettings.launcherBackgroundOpacity.state.toFloat() / 100f
 
     val backgroundColor = if (isBackgroundValid) {
         backgroundColor().copy(alpha = launcherBackgroundOpacity)
-    } else backgroundColor()
+    } else {
+        backgroundColor()
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -178,7 +183,8 @@ fun MainScreen(
                     isTasksExpanded = isTaskMenuExpanded,
                     contentColor = onBackgroundColor(),
                     onScreenBack = {
-                        screenBackStackModel.mainScreen.backStack.removeFirstOrNull()
+                        screenBackStackModel.mainScreen.backStack
+                            .removeFirstOrNull()
                     },
                     toMainScreen = toMainScreen,
                     toSettingsScreen = {
@@ -199,7 +205,8 @@ fun MainScreen(
                     openFileManager = {
                         eventViewModel.sendEvent(
                             EventViewModel.Event.OpenFileManager(
-                                rootPath = PathManager.DIR_FILES_EXTERNAL.absolutePath
+                                rootPath = PathManager
+                                    .DIR_FILES_EXTERNAL.absolutePath
                             )
                         )
                     },
@@ -214,7 +221,9 @@ fun MainScreen(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                NavStateHost(rootKey = screenBackStackModel.mainScreen) {
+                NavStateHost(
+                    rootKey = screenBackStackModel.mainScreen
+                ) {
                     NavigationUI(
                         modifier = Modifier.fillMaxSize(),
                         screenBackStackModel = screenBackStackModel,
@@ -259,16 +268,24 @@ private fun <E : TitledNavKey> TopBar(
 ) {
     val festivals = LocalFestivals.current
 
-    val inMultiplayerScreen = mainScreenKey is NormalNavKey.Multiplayer
-    val inDownloadScreen = mainScreenKey is NestedNavKey.Download
-    val inSettingsScreen = mainScreenKey is NestedNavKey.Settings
+    val inMultiplayerScreen =
+        mainScreenKey is NormalNavKey.Multiplayer
 
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
+    val inDownloadScreen =
+        mainScreenKey is NestedNavKey.Download
+
+    val inSettingsScreen =
+        mainScreenKey is NestedNavKey.Settings
+
+    CompositionLocalProvider(
+        LocalContentColor provides contentColor
+    ) {
         ConstraintLayout(modifier = modifier) {
             val (backCenter, title, endButtons) = createRefs()
 
             val backDispatcher =
-                LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+                LocalOnBackPressedDispatcherOwner.current
+                    ?.onBackPressedDispatcher
 
             Row(
                 modifier = Modifier
@@ -279,7 +296,9 @@ private fun <E : TitledNavKey> TopBar(
                     }
                     .fillMaxHeight()
             ) {
-                AnimatedVisibility(visible = !inLauncherScreen) {
+                AnimatedVisibility(
+                    visible = !inLauncherScreen
+                ) {
                     Row(modifier = Modifier.fillMaxHeight()) {
                         Spacer(Modifier.width(12.dp))
 
@@ -287,16 +306,21 @@ private fun <E : TitledNavKey> TopBar(
                             modifier = Modifier.fillMaxHeight(),
                             onClick = {
                                 if (!inLauncherScreen) {
-                                    backDispatcher?.onBackPressed() ?: run {
-                                        onScreenBack()
-                                    }
+                                    backDispatcher?.onBackPressed()
+                                        ?: run {
+                                            onScreenBack()
+                                        }
                                 }
                             }
                         ) {
                             Icon(
                                 modifier = Modifier.size(24.dp),
-                                painter = painterResource(R.drawable.ic_arrow_back),
-                                contentDescription = stringResource(R.string.generic_back)
+                                painter = painterResource(
+                                    R.drawable.ic_arrow_back
+                                ),
+                                contentDescription = stringResource(
+                                    R.string.generic_back
+                                )
                             )
                         }
 
@@ -309,8 +333,12 @@ private fun <E : TitledNavKey> TopBar(
                             }
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_home_filled),
-                                contentDescription = stringResource(R.string.generic_main_menu)
+                                painter = painterResource(
+                                    R.drawable.ic_home_filled
+                                ),
+                                contentDescription = stringResource(
+                                    R.string.generic_main_menu
+                                )
                             )
                         }
                     }
@@ -318,8 +346,10 @@ private fun <E : TitledNavKey> TopBar(
             }
 
             val parentRes = mainScreenKey?.title
+
             val childRes =
-                (mainScreenKey as? BackStackNavKey<*>)?.currentKey?.title
+                (mainScreenKey as? BackStackNavKey<*>)
+                    ?.currentKey?.title
 
             Crossfade(
                 modifier = Modifier.constrainAs(title) {
@@ -349,8 +379,14 @@ private fun <E : TitledNavKey> TopBar(
                     }
                 } else {
                     val titleText = if (child != null) {
-                        androidText(parent, androidText(" - "), child)
-                    } else parent
+                        androidText(
+                            parent,
+                            androidText(" - "),
+                            child
+                        )
+                    } else {
+                        parent
+                    }
 
                     AndroidStringText(
                         text = titleText,
@@ -372,58 +408,85 @@ private fun <E : TitledNavKey> TopBar(
             ) {
                 AnimatedVisibility(
                     visible = !(isTasksExpanded || taskRunning),
-                    enter = slideInVertically(initialOffsetY = { -50 }) + fadeIn(),
-                    exit = slideOutVertically(targetOffsetY = { -50 }) + fadeOut()
+                    enter = slideInVertically(
+                        initialOffsetY = { -50 }
+                    ) + fadeIn(),
+                    exit = slideOutVertically(
+                        targetOffsetY = { -50 }
+                    ) + fadeOut()
                 ) {
                     Row(
                         modifier = Modifier
                             .clip(shape = MaterialTheme.shapes.large)
-                            .clickable { changeExpandedState() }
+                            .clickable {
+                                changeExpandedState()
+                            }
                             .padding(all = 8.dp)
                             .width(120.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        LinearProgressIndicator(modifier = Modifier.weight(1f))
+                        LinearProgressIndicator(
+                            modifier = Modifier.weight(1f)
+                        )
+
                         Icon(
                             modifier = Modifier.size(22.dp),
-                            painter = painterResource(R.drawable.ic_assignment_filled),
-                            contentDescription = stringResource(R.string.main_task_menu)
+                            painter = painterResource(
+                                R.drawable.ic_assignment_filled
+                            ),
+                            contentDescription = stringResource(
+                                R.string.main_task_menu
+                            )
                         )
                     }
                 }
 
                 IconButton(onClick = openFileManager) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_folder_filled),
+                        painter = painterResource(
+                            R.drawable.ic_folder_filled
+                        ),
                         contentDescription = null
                     )
                 }
 
                 TopBarRailItem(
                     selected = inMultiplayerScreen,
-                    painter = painterResource(R.drawable.ic_group_filled),
+                    painter = painterResource(
+                        R.drawable.ic_group_filled
+                    ),
                     text = stringResource(R.string.terracotta),
                     onClick = {
-                        if (!inMultiplayerScreen) toMultiplayerScreen()
+                        if (!inMultiplayerScreen) {
+                            toMultiplayerScreen()
+                        }
                     }
                 )
 
                 TopBarRailItem(
                     selected = inDownloadScreen,
-                    painter = painterResource(R.drawable.ic_download_2_filled),
+                    painter = painterResource(
+                        R.drawable.ic_download_2_filled
+                    ),
                     text = stringResource(R.string.generic_download),
                     onClick = {
-                        if (!inDownloadScreen) toDownloadScreen()
+                        if (!inDownloadScreen) {
+                            toDownloadScreen()
+                        }
                     }
                 )
 
                 TopBarRailItem(
                     selected = inSettingsScreen,
-                    painter = painterResource(R.drawable.ic_settings_filled),
+                    painter = painterResource(
+                        R.drawable.ic_settings_filled
+                    ),
                     text = stringResource(R.string.generic_setting),
                     onClick = {
-                        if (!inSettingsScreen) toSettingsScreen()
+                        if (!inSettingsScreen) {
+                            toSettingsScreen()
+                        }
                     }
                 )
             }
@@ -444,10 +507,15 @@ private fun TopBarRailItem(
         modifier = modifier,
         onClick = onClick,
         text = {
-            AnimatedVisibility(visible = selected) {
+            AnimatedVisibility(
+                visible = selected
+            ) {
                 Row {
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = text, style = textStyle)
+                    Text(
+                        text = text,
+                        style = textStyle
+                    )
                 }
             }
         },
@@ -458,7 +526,10 @@ private fun TopBarRailItem(
             )
         },
         selected = selected,
-        selectedPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+        selectedPadding = PaddingValues(
+            horizontal = 16.dp,
+            vertical = 4.dp
+        ),
         unSelectedPadding = PaddingValues(all = 8.dp)
     )
 }
@@ -473,7 +544,9 @@ private fun NavigationUI(
     modifyVersionViewModel: ModifyVersionViewModel,
     submitError: (ErrorViewModel.ThrowableMessage) -> Unit
 ) {
-    val backStack = screenBackStackModel.mainScreen.backStack
+    val backStack =
+        screenBackStackModel.mainScreen.backStack
+
     val currentKey = backStack.lastOrNull()
 
     LaunchedEffect(currentKey) {
@@ -506,6 +579,7 @@ private fun NavigationUI(
             transitionSpec = rememberTransitionSpec(),
             popTransitionSpec = rememberTransitionSpec(),
             entryProvider = entryProvider {
+
                 entry<NormalNavKey.LauncherMain> {
                     LauncherScreen(
                         backStackViewModel = screenBackStackModel,
@@ -517,7 +591,8 @@ private fun NavigationUI(
                         },
                         onQuickPlayServer = { version, address ->
                             val target =
-                                (version ?: VersionsManager.currentVersion.value)
+                                (version
+                                    ?: VersionsManager.currentVersion.value)
                                     ?.takeIf { it.isValid() }
 
                             if (target != null) {
@@ -529,8 +604,11 @@ private fun NavigationUI(
                                 )
                             } else {
                                 eventViewModel.sendToast(
-                                    androidText(R.string.game_launch_no_version)
+                                    androidText(
+                                        R.string.game_launch_no_version
+                                    )
                                 )
+
                                 screenBackStackModel.mainScreen.navigateTo(
                                     NormalNavKey.VersionsManager
                                 )
@@ -552,7 +630,9 @@ private fun NavigationUI(
                         key = key,
                         backStackViewModel = screenBackStackModel,
                         openLicenseScreen = { raw ->
-                            backStack.navigateTo(NormalNavKey.License(raw))
+                            backStack.navigateTo(
+                                NormalNavKey.License(raw)
+                            )
                         },
                         eventViewModel = eventViewModel,
                         submitError = submitError
@@ -634,7 +714,7 @@ private fun NavigationUI(
                 entry<NestedNavKey.Download> { key ->
                     DownloadScreen(
                         key = key,
-                        backScreenViewModel = screenBackStackModel,
+                        backStackViewModel = screenBackStackModel,
                         eventViewModel = eventViewModel,
                         modpackImportViewModel = modpackImportViewModel,
                         submitError = submitError
@@ -644,7 +724,8 @@ private fun NavigationUI(
                 entry<NestedNavKey.AddonInfo> { key ->
                     AddonInfoScreen(
                         key = key,
-                        mainScreenKey = screenBackStackModel.mainScreen.currentKey,
+                        mainScreenKey =
+                            screenBackStackModel.mainScreen.currentKey,
                         addonInfoScreenKey = key.currentKey,
                         eventViewModel = eventViewModel,
                         submitError = submitError
@@ -665,7 +746,7 @@ private fun NavigationUI(
                     )
                 }
             }
-        }
+        )
     } else {
         Box(modifier)
     }
@@ -678,9 +759,11 @@ private fun TaskMenu(
     changeExpandedState: () -> Unit = {}
 ) {
     val tasks by TaskSystem.tasksFlow.collectAsStateWithLifecycle()
+
     val show = isExpanded && tasks.isNotEmpty()
 
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val isRtl =
+        LocalLayoutDirection.current == LayoutDirection.Rtl
 
     AnimatedVisibility(
         modifier = modifier,
@@ -704,7 +787,9 @@ private fun TaskMenu(
                 containerColor = backgroundColor(),
                 contentColor = onBackgroundColor()
             ),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp)
+            elevation = CardDefaults.elevatedCardElevation(
+                defaultElevation = 6.dp
+            )
         ) {
             Column {
                 CardTitleLayout(blur = 0) {
@@ -733,7 +818,9 @@ private fun TaskMenu(
 
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = stringResource(R.string.main_task_menu)
+                            text = stringResource(
+                                R.string.main_task_menu
+                            )
                         )
                     }
                 }
@@ -747,11 +834,17 @@ private fun TaskMenu(
                         vertical = 6.dp
                     )
                 ) {
-                    items(tasks, key = { it.id }) { task ->
+                    items(
+                        tasks,
+                        key = { it.id }
+                    ) { task ->
+
                         val taskProgress by
                             task.progress.collectAsStateWithLifecycle()
+
                         val taskMessage by
                             task.message.collectAsStateWithLifecycle()
+
                         val rateBytesPerSec by
                             task.rateBytesPerSec.collectAsStateWithLifecycle()
 
@@ -801,8 +894,12 @@ private fun TaskItem(
             ) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = stringResource(R.string.generic_cancel)
+                    painter = painterResource(
+                        R.drawable.ic_close
+                    ),
+                    contentDescription = stringResource(
+                        R.string.generic_cancel
+                    )
                 )
             }
 
@@ -834,17 +931,20 @@ private fun TaskItem(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    taskProgress.takeIf { it >= 0f }?.let { progress ->
-                        Text(
-                            text = "${(progress * 100).toInt()}%",
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
+                    taskProgress
+                        .takeIf { it >= 0f }
+                        ?.let { progress ->
+                            Text(
+                                text = "${(progress * 100).toInt()}%",
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
 
                     rateBytesPerSec?.let { bytes ->
                         val text = remember(bytes) {
                             "${formatFileSize(bytes)}/s"
                         }
+
                         Text(
                             text = text,
                             style = MaterialTheme.typography.labelMedium
